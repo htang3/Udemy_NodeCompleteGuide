@@ -1,0 +1,301 @@
+5. Understand the Role of Nodejs
+Create Server and Listen to Incoming Requests
+Handle request, validate input, Connect to database
+Response
+25. How the Web works:
+ user enter some url.com to browser=>Domain Loop => send request to server
+ => Backend handle the requests(reaching to database)
+ => then, server sends response back to the user.
+ Request and response done in protocol, http or https
+
+ 26. Creating a Node Server
+ Core Modules: http-launch a server, send request
+ https - launch a SSL server,fs,path,os
+
+ To create a server: const sth= require('http')
+ const server = sth.createServer((req,res)=>{
+
+ })
+ server.listen(3000)//go to the browser enter localhost:3000 to see the output
+ in the terminal
+
+ 27***. The Nodejs Lifecycle and Event Loop
+ node app.js => Start Script => Parse code, register varibale and function
+ =>then enter Event loop(server keep listenning to the req)
+ Because the event is registered, so it keep running
+ Nodejs handle the server and execute one thread on our computer
+ Nodejs uses event loop concept where it always keep on running
+ and just executes when a certain event occurs.
+ Therefore, it keeps running to get the requests. 
+ In OS, it leverages os in multithread
+ process.exit to stop listenning
+
+ 29.Understand Requests
+ console.log(req.url, req.method) and so on to see the request.
+ 30. Sending Responses
+ res.write to write html code. 
+ res.end after this, we don write any more
+ in browser ctrl+shift I, check the network to see details
+ RELOADS and run node app.js everytime we update thing.
+
+ 30READ. Request and Response Headers
+ On both requests and responses, Http headers are added to transport metadata from A to B.
+The following article provides a great
+ overview of available headers and their role: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
+
+ 31. Routing Requests(connect req and res)
+ check if the req.url matches with "/", if so, write the response
+
+ 32. Redirecting requests
+ if (url ==='/message' && method ==='POST'){
+        // redirect user 
+        fs.writeFileSync('message.txt','DUMMY',{});
+         res.writeHead(302,"inside writeHead", {'Location':'/'});
+        // res.statusCode = 302;
+        // res.setHeader('Location','/');
+        return res.end();
+redirect to the same page, check status 302.
+
+33.Parsing Request Bodies(Stream & Buffer)*****
+Stream is an on going process, request is read by node in chunk
+To organize income chunk, use Buffer. Buffer like bus stop, allow you to hold multiple chunk
+Get request data. req.on('data', (chunk)=>{
+        body.push(chunk); //push a new element on the body.
+
+})
+req.on('end',()=>{
+        const parseBody = Buffer.concat(body).toString();
+})
+34. Understanding Event Driven Code Execution.
+sending response does not mean event listener are dead
+it just called back to req.on(end) to be called sometimes in the future.
+Therefore it won't get execute. 
+
+36.Blocking and Non-Blocking Code
+writeFileSync(file,): will block code execution until the file is created.
+use writeFile instead: because accept the path, and it's asynchronous. So, other code can get executed.
+
+37. Nodejs - Look behind the scenes
+using single thread, event keep looping.
+can set Timer, setInterval callbacks.
+Pending Callbacks (Execute I/O ...) => look at the Poll to look for other event
+execute setImmediate() callbacks to check
+then execute "close" to close event callback
+
+38. Using Node Modules system
+
+39. Wrap up
+Client => Request => Server => Response => Client
+Lifecycle: Non-blocking JS code, and use an event-driven code for running logic
+Node program exits as soon as there is no more work to docs
+
+Asynchronous Code, Request and Responses (Stream and Buffer)
+42. Understand NPM Scripts
+Run npm init to initalize the package
+in package.json, scripts "start": "node app.js"
+43. 3rd Party Packages
+expressjs, body-parser, nodemon
+can delete node modules, then re install when working with it
+
+44. Global features: Keywords like const or function but also some global objects like process
+Core Node.js Modules: Examples would be the file-system module ("fs"), the path module ("path") or the Http module ("http")
+Third-party Modules: Installed via npm install - you can add any kind of feature to your app via this way
+
+47. Understanding different Error Types
+Syntax Errors, Runtime Errors, Logical Error
+48. Syntax Errors
+typo, mistype, extra character
+49. Runtime Error
+check the error message in terminal and debug
+50. Logical Error
+use nodejs debugger
+First, quit the running terminal
+Second, Start the debugger
+Third, open browser and enter localhost
+fourth, set breakpoint
+go into or go over it
+52. Restarting the Debugger Automatically After Editing our app
+Debug=> Add Configuration=>launch.json
+53. Debugging Nodejs in VS Code
+ https://code.visualstudio.com/docs/nodejs/nodejs-debugging
+
+SECTION 5: WORKING WITH EXPRESS.JS**********************************
+58. What is Express?
+Express is a Framework includes Helper functions, tools and rules. 
+Alternatives to Express.js: vanilla Node.js, Adonis.js, Koa, Sails.js....
+
+59. Installing Express.js
+npm install --save express // using --save because it's on production
+in app.js
+const express = require('express');
+const app = express();
+const server = http.createServer(app);
+
+60. adding Middleware
+express is middleware.
+Request => Middleware (req,res,next) => Response
+next allows program moves to the next middleware
+
+61.How middleware works
+res.send()// similar to res.write()
+
+62.Look behind the scence- expressjs
+// const server = http.createServer(app);
+// server.listen(3000); 
+use app.listen(3000);
+https://github.com/expressjs/express to learn about behind the scence
+
+63. Handle Different Routes
+app.use('/', (callback functions in here))
+
+64. Parsing Incoming Requests: to parse incoming request
+install --save body-parser 
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlendcoded( {executed: false}))
+
+65. Limit middleware to POST request
+use app.post for post request
+use app.get for get request 
+
+66. Using Express Router
+Create routes folder, and admin.js create the product, shop.js is what user see.
+
+const express = require('express');
+const router = express.Router();
+router.get('/')
+use get and post to give exact routes.
+'/' route should be at the last route
+
+67. 404 Pages 
+app.use('/', (req, res) => {
+    res.status(404).send("<h1>Page Not Found</h1>");
+})
+68. Filter Routes
+in app.js, add admin path for adminRouter
+in admin.js, add admin/add-product in form. 
+
+69. Adding html Pages
+70. Serving html Page
+in shop.js and admin.js
+const path = require('path')
+
+res.sendFile(path.join(__dirname, '..','views','html'))
+71. Return 404 page
+72. Using Helper function
+path.js
+replace(__dirname, "..") with export file from path.js
+
+73. Styling our Pages
+74. Serve Files Statically
+app.use(express.static(path.join(__dirname, "public")))
+75. Wrap up
+Express js is a package add utility functions and tools and clear set of rules on how the app should be built
+using middleware
+Routing: filter req by path and method, using router.get or router.post to route exact
+Middleware, next(), res(): replies on heavy middleware use()
+Serving File: use res.sendFile(path.join(dirname.....+ path))
+*************************************************************
+SECTION 6: WORKING WITH DYNAMIC CONTENT, TEMPLATING ENGINES**********************************
+77. Module intro
+Managing Data(without a Database), Render Dynamic Content in our Views, Understanding Templating ENGINES
+78. Sharing Data Across Requests & Users
+in admin.js
+const product =[];
+in post req, product.push({req.body.title});
+exports.product = product;
+in shop.js
+in get req, console.log("shope.js", adminData.product);
+in app.js
+adminData.routes
+
+79. Templating ENGINES
+EJS: <p><%= name %></p>, use normal html, javaScript.
+Pug: p #{name}
+Handlebars: <p> {{name}}</p>
+
+80. installing and implementing Pug
+in views folder, create shop.Pug
+in app.js: 
+//global value, setting the pug
+app.set('view engine', 'pug')
+app.set('views', 'views')
+81. Outputing Dynamic Content
+in shop.pug, convert shop.html to shop.pug 
+in shop.js: const product = [];
+  res.render('shop', { prod: product, docTitle: "Shop Pug" });
+82. Converting Html Files to Pug
+convert add-product.html to add-product.pug
+convert 404.html to 404.pug
+83. Read Official Pug docs
+84. Adding a Layout
+create layouts folder and main-layout.pug
+adjust all pug file with extends layout
+85. Finishing the Pug template
+86. Avoiding an Error(Handlebars)
+87. working with Handlebars
+88. Converting project to Handlebars
+89. Adding the Layout to Handlebars
+90. Working with EJS
+<%= for value%>
+<% statement%>
+91. Working on Layout with Partials
+Create includes folder with 3 files: head.ejs, nav.ejs, end.ejs
+in all file ejs file, replace part of code with head.ejs, nav.ejs, end.ejs 
+
+92. Wrap up
+EXERCISES
+94. Useful resources & Links
+***********************************************************
+SECTION 7: THE MODEL VIEW CONTROLLER(MVC)*******************
+95. Module Introduction
+96. What is MVC?
+Models: represent your data, Work with your data(save, fetch)
+Views: What users sees, Decoupled from your application code
+Controller: Connecting your Models and your Views, in-between logic
+Routes: decide which controller should execute
+97. Adding Controllers
+Add controllers folder,
+move the get, post logic from routes into Controller
+98. Finishing the Controllers
+add 404.js into controllers, move the logic into 404.js with path: ''
+require 404.js in app.js and get404 method.
+99. Adding a Product Models
+all the logic goes here
+const products = []
+module.exports = class Product {
+    constructor(t) {
+        this.title = t;
+    }
+
+    // save method to store array products
+    save() {
+        products.push(this)
+    }
+
+    // static help call this method direct from the class itself
+    static fetchAll() {
+        return products;
+    }
+
+
+}
+100. Storing Data in Files Via the Models
+adding fs into models/product.js, 
+create class Product to store product into file
+ 101. Fetching Data from Files Via the Models
+
+ 102. Refactoring the File Storage Code
+ 103. Wrap up
+REVIEW 99 ->102 BEFORE MOVING ON
+****************************************************************************
+SECTION 8: Optional: Enhancing the App *********************************
+105: Intro
+106. Creating the Shop Structure
+add admin folder in views to store all related file
+add more file into views/shop (cart, checkout, index, product-detail)
+107 Working with Navigation
+in includes/nav: add more list in there
+108: REgistering Routes***
+Adding more routes to render associated file in views folder.
+Split the controllers into admin logic and shop logic
+109. Storing Product Data

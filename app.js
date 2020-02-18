@@ -1,43 +1,22 @@
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
+const bodyParser = require('body-parser');
+const path = require('path');
+const app = express(); //app is express application
+const errorController = require('./controllers/404')
+//global value, setting the pug
+app.set('view engine', 'ejs');
+app.set('views', 'views')
 
-const server = http.createServer((req,res) => {
-    const  url = req.url;
-    const method = req.method;
-    if (url === "/"){
-        res.write("<html>");
-        res.write("<head></head>");
-        res.write('<body><form action="/message" method="POST"><input type="text" name="message"><button type="submit">Send</button></form></body>');
-        res.write('</html>');
-        return res.end();
-    }
-    if (url === "/message" && method ==="POST"){
-        console.log("here");
-        const body=[];
-        //add event listener to the incoming data
-        req.on('data',(chunk) => {
-            console.log(chunk);
-            body.push(chunk);
-        });
-        //Add a return to get this piece of code executed first, rather than wait for the BOTTOM
-        // ES6 function is a callback function
-        return req.on('end', ()=>{
-            const  parsedBody = Buffer.concat(body).toString();
-            console.log(parsedBody);
-            const message = parsedBody.split('=')[1];
-            console.log(message)
-            fs.writeFileSync('message.txt', message);
-            res.statusCode =302;
-            res.setHeader("Location", '/');
-            return res.end();
-        });
-      
-    }
-    // BOTTOM
-    res.setHeader("Content-type", "This is testing");
-    res.write('<html>');
-    res.write('<head></head>');
-    res.write('<body>This is nodejs Server</body>');
-    res.write('</html>');
-})
-server.listen(3000);
+
+const adminRoute = require('./routes/admin');
+const shopeRoutes = require('./routes/shop')
+
+app.use(bodyParser.urlencoded({ extended: false })); //register some middleware and call next in the end
+app.use(express.static(path.join(__dirname, 'public'))); //for render static file css or js
+
+app.use('/admin', adminRoute);
+app.use(shopeRoutes);
+
+app.use(errorController.get404)
+
+app.listen(3000);
