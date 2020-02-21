@@ -23,12 +23,16 @@ const getProductFromFile = (callback) => {
 }
 
 module.exports = class Product {
-    constructor(t) {
-        this.title = t;
+    constructor(title, imageURL, price, description) {
+        this.title = title;
+        this.imageURL = imageURL;
+        this.price = price;
+        this.description = description;
     }
 
     // save method to store array products
     save() {
+        this.id = Math.random().toString();
         getProductFromFile(products => {
             products.push(this);
             // we use this here because to ensure it refers to a class
@@ -42,5 +46,12 @@ module.exports = class Product {
     // static help call this method direct from the class itself
     static fetchAll(callback) {
         getProductFromFile(callback)
+    }
+
+    static findById(id, cb) {
+        getProductFromFile(products => {
+            const product = products.find(p => p.id === id)
+            cb(product)
+        })
     }
 }

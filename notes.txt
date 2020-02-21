@@ -299,3 +299,45 @@ in includes/nav: add more list in there
 Adding more routes to render associated file in views folder.
 Split the controllers into admin logic and shop logic
 109. Storing Product Data
+in models/product.js adding more parameter for the constructor
+in views/admin/add-product, add imageURL, price, description
+For the description, change the style, input to texera
+in controller/admin, postAddProduct, at more fields. Make sure 
+req body same as name in html. 
+110. Displaying Product Data
+product-list.ejs, our put dynamic data for imageURL, price, description
+add step in the price field to accept decimal number
+111. Editing and Deleting Product for Admin
+in admin/products add Edit button and Deleting button.
+We need to pass id of single product to edit or delete
+in product-list, add to cart button
+112. Adding Another Item
+Add orders.ejs, add order nav, add getOrder in shop.js router and controller
+************************************************************************
+SECTION 9: Dynamic Routes & Advanced Models
+114. Module Introduction
+Passing Route Params
+Using Query Params
+Enhance our Models
+115, 116: applied change and adjustment
+117: Adding the Product ID to the path
+in models/ products, in save() ad this.id = Math.random().toString()
+in product-list.ejs, 
+<a href="/products/<%= product.id%>" class='btn'>Details</a>"
+118. Extracting Dynamic Params
+in routes/shop.js, add new router to get a specific product
+router.get('/products/:productId')
+in controller/ shop.js. getProduct = (req, res,next)=>{
+    const prodId= req.params.productId;
+
+}
+119. Loading Product Details
+in models/product.js. Add findById(id, cb){
+    get all product from file (products => {
+        # products is products array and we need to find single product that has id match with id we looking for.
+        const product = products.find(p => p.id ===id)
+    })
+}
+
+
+

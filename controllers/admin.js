@@ -1,5 +1,5 @@
 const Product = require('../models/product');
-
+// get req, displaying add-product form
 exports.getAddProduct = (req, res, next) => {
     //res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
     res.render('admin/add-product', {
@@ -10,9 +10,14 @@ exports.getAddProduct = (req, res, next) => {
         activeAddProduct: true
     })
 }
-
+// post req, get inpute field from user and store
+//
 exports.postAddProduct = (req, res, next) => {
-    const product = new Product(req.body.title);
+    const title = req.body.title;
+    const imageURL = req.body.imageURL;
+    const price = req.body.price;
+    const description = req.body.description;
+    const product = new Product(title, imageURL, price, description);
     product.save();//save to file in models 
     res.redirect('/');
 }

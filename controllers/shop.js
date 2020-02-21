@@ -14,6 +14,15 @@ exports.getProducts = (req, res, next) => {
     });
 
 }
+
+exports.getProduct = (req, res, next) => {
+    // we use productId because in routes/shop.js. we has productId as params
+    const prodId = req.params.productId;
+    Product.findById(prodId, product => {
+        console.log("here", product);
+    })
+    res.redirect('/')
+}
 // Get admin list products
 exports.getIndex = (req, res, next) => {
     // const product = adminData.product;
@@ -34,6 +43,12 @@ exports.getCart = (req, res, next) => {
     res.render('shop/cart', {
         pageTitle: 'Your Cart',
         path: '/cart'
+    })
+}
+exports.getOrders = (req, res, next) => {
+    res.render('shop/orders', {
+        pageTitle: 'Your Orders',
+        path: '/orders'
     })
 }
 
