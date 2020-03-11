@@ -1,4 +1,5 @@
 const Product = require('../models/product')
+//get all the products
 exports.getProducts = (req, res, next) => {
     // const product = adminData.product;
     // console.log("shop.js", adminData.product);
@@ -14,17 +15,22 @@ exports.getProducts = (req, res, next) => {
     });
 
 }
-
+// get a single product detail
 exports.getProduct = (req, res, next) => {
     // we use productId because in routes/shop.js. we has productId as params
     const prodId = req.params.productId;
-    Product.findById(prodId, product => {
-        console.log("here", product);
+    Product.findByPk(prodId, product => {
+        res.render('shop/product-detail', {
+            product: product,
+            pageTitle: product.title,
+            path: '/products'
+        })
     })
-    res.redirect('/')
+
 }
 // Get admin list products
 exports.getIndex = (req, res, next) => {
+    console.log("starting page here");
     // const product = adminData.product;
     // console.log("shop.js", adminData.product);
     //res.sendFile(path.join(rootDir, 'views', 'shop.html'));

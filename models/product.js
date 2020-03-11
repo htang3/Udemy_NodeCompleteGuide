@@ -32,6 +32,7 @@ module.exports = class Product {
 
     // save method to store array products
     save() {
+        // generate random id
         this.id = Math.random().toString();
         getProductFromFile(products => {
             products.push(this);
@@ -48,10 +49,11 @@ module.exports = class Product {
         getProductFromFile(callback)
     }
 
-    static findById(id, cb) {
+    static findByPk(id, cb) {
         getProductFromFile(products => {
+            //filter out the product we interested in.
             const product = products.find(p => p.id === id)
-            cb(product)
+            cb(product);
         })
     }
 }
