@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const app = express(); //app is express application
+
 const errorController = require('./controllers/404')
 //global value, setting the pug
 app.set('view engine', 'ejs');
