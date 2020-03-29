@@ -335,9 +335,23 @@ in controller/ shop.js. getProduct = (req, res,next)=>{
 in models/product.js. Add findById(id, cb){
     get all product from file (products => {
         # products is products array and we need to find single product that has id match with id we looking for.
-        const product = products.find(p => p.id ===id)
+        const product = products.find(p => p.id ===id);
+        cb(product)
     })
 }
+120. Render Product Detail Views
+in Views/shop/product-details, add code inside there
+product.title, product. description....
+in controller/ shop.js
+add getProduct, get the productId as defined in routes/shop.js
+Product.findByPk(prodId, product => {
+    product: product; //first product will be refer in the view
+    ...
+})
+121. passing data with Post request
+in product-detail.js
+pass product id into POST req, only POST can do it. GET Cannot
+
 
 
 

@@ -2,21 +2,20 @@ const path = require('path');
 
 const express = require('express');
 
+const shopController = require('../controllers/shop');
+
 const router = express.Router();
 
-const shopControllers = require('../controllers/shop')
+router.get('/', shopController.getIndex);
 
+router.get('/products', shopController.getProducts);
 
-router.get('/', shopControllers.getIndex);
+router.get('/products/:productId', shopController.getProduct);
 
-router.get('/products', shopControllers.getProducts);
-// : signal the express to get the id as dynamic segment
+router.get('/cart', shopController.getCart);
 
-// *****Add more specific route before this route productId
-router.get('/products/:productId', shopControllers.getProduct)
-router.get('/cart', shopControllers.getCart);
-router.get('/orders', shopControllers.getOrders);
-router.get('/checkout', shopControllers.getCheckout);
+router.get('/orders', shopController.getOrders);
 
+router.get('/checkout', shopController.getCheckout);
 
 module.exports = router;
